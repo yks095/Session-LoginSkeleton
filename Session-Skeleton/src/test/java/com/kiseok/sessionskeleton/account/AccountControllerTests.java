@@ -9,10 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -32,9 +30,6 @@ public class AccountControllerTests {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     @DisplayName("회원가입 화면 조회 테스트")
     @Test
     public void getSignUp() throws Exception {
@@ -48,7 +43,7 @@ public class AccountControllerTests {
     @DisplayName("회원가입 성공 테스트")
     @Test
     public void successSignUp() throws Exception {
-        String email = "email@email.com";
+        String email = "test@email.com";
         String password = "password";
 
         AccountDto accountDTO = AccountDto.builder()
@@ -80,7 +75,7 @@ public class AccountControllerTests {
     void success_login() throws Exception   {
         AccountDto accountDTO = AccountDto.builder()
                 .email("test@email.com")
-                .password("pwd")
+                .password("password")
                 .build();
 
         mockMvc.perform(post("/sign-up")

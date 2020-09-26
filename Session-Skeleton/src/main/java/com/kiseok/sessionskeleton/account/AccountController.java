@@ -2,6 +2,7 @@ package com.kiseok.sessionskeleton.account;
 
 import com.kiseok.sessionskeleton.account.dto.AccountDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
+@Slf4j
 @RequiredArgsConstructor
 @Controller
 public class AccountController {
@@ -31,12 +34,7 @@ public class AccountController {
         WebAuthenticationDetails details = (WebAuthenticationDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
         HttpSession session = request.getSession();
 
-        System.out.println("Email : " + user.getUsername());
-        System.out.println("Password : " + passwordEncoder.matches("1234", account.getPassword()));
-        System.out.println("ROLE : " + user.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER")));
-        System.out.println("SessionID : " + details.getSessionId());
-        System.out.println("RemoteAddress : " + details.getRemoteAddress());
-        System.out.println("HttpSession : " + session.getId());
+        printLogs(user, account, details, session);
 
         return "main";
     }
@@ -48,7 +46,7 @@ public class AccountController {
 
     @PostMapping("/sign-up")
     @ResponseBody
-    public ResponseEntity<?> signUp(@RequestBody AccountDto accountDto) {
+    public ResponseEntity<?> signUp(@RequestBody @Valid AccountDto accountDto) {
         accountRepository.save(accountDto.toEntity(passwordEncoder));
         return new ResponseEntity<>("{}", HttpStatus.CREATED);
     }
@@ -58,5 +56,13 @@ public class AccountController {
         return "account/sign-in";
     }
 
+    private void printLogs(User user, Account account, WebAuthenticationDetails details, HttpSession session) {
+        log.info("Email : " + user.getUsername());
+        log.info("Password : " + passwordEncoder.matches("1234", account.getPassword()));
+        log.info("ROLE : " + user.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER")));
+        log.info("SessionID : " + details.getSessionId());
+        log.info("RemoteAddress : " + details.getRemoteAddress());
+        log.info("HttpSession : " + session.getId());
+    }
 }
 

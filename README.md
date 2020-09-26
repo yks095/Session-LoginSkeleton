@@ -1,5 +1,5 @@
 # Spring-LoginSkeleton
-`Spring Boot`를 사용하여 다양한 곳에서 유사하게 사용 될`Login Skeleton`를 구현하기 위한 저장소
+`Spring Boot`를 사용하여 다양한 곳에서 유사하게 사용 될`Login Skeleton`를 구현하기 위한 저장소입니다. (with [민경환](https://github.com/ber01/Spring-Security-Login-Skeleton))
 
 ## 학습 목표
 - `Spring Security`의 이해

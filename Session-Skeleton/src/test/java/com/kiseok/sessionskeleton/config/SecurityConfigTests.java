@@ -11,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -28,10 +27,19 @@ public class SecurityConfigTests {
     @Autowired
     ObjectMapper objectMapper;
 
-    @DisplayName("리소스 적용 테스트")
+    @DisplayName("css 적용 테스트")
     @Test
-    public void getResource() throws Exception {
+    public void getCssResource() throws Exception {
         mockMvc.perform(get("/css/base.css"))
+                .andDo(print())
+                .andExpect(status().isOk())
+        ;
+    }
+
+    @DisplayName("js 적용 테스트")
+    @Test
+    public void getJsResource() throws Exception {
+        mockMvc.perform(get("/js/base.js"))
                 .andDo(print())
                 .andExpect(status().isOk())
         ;

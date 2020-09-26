@@ -10,8 +10,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import java.util.Collections;
 
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class AccountService implements UserDetailsService {
 
@@ -19,11 +19,13 @@ public class AccountService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        log.info("진입, email : " + email);
+        log.info("loadUserByUsername 진입");
+        log.info("username : " + email);
+
         Account account = accountRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException(email));
-        log.info("디비에서 찾음");
-        log.info("password : " + account.getPassword());
+
+        log.info("DB에서 찾은 user의 password : " + account.getPassword());
 
         return new User(account.getEmail(), account.getPassword(), Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
     }
