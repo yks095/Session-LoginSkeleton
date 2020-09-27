@@ -2,37 +2,56 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
-    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <link rel="stylesheet" href="/css/base.css">
-    <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script
-            src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script
-            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script
-            src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <title>Sign-Up</title>
+    <link rel="stylesheet" href="/css/sign.css">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>회원가입</title>
 </head>
 <body>
 
-<form class="wrapper" onsubmit="return false">
-    <h3>Skeleton 회원가입 페이지</h3>
-    <div class="form-group">
-        <label for="email">Email address</label>
-        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" required autofocus>
-    </div>
-    <div class="form-group">
-        <label for="pwd">Password</label>
-        <input type="password" class="form-control" id="pwd" required>
-    </div>
-    <div class="submitBtn">
-        <button type="submit" class="sign-up btn btn-primary">Submit</button>
-    </div>
-</form>
+<div class="form_border">
+    <h2>회원가입</h2>
+    <input type="email" id="sign_up_email" name="email">
+    <input type="password"  id="sign_up_password"name="password">
+    <button class="btn" id="sign_up_btn">회원가입</button>
+    <a href="/sign-in" style="text-decoration: none">
+        <p style="color: white; font-size: 0.8rem; text-align: right">이미 아이디가 있으신가요?</p>
+    </a>
+</div>
 
-<script type="text/javascript" src="/js/base.js"></script>
+<script type="text/javascript">
+    $("#sign_up_btn").click( function (event) {
+
+            const jsonData = JSON.stringify({
+                email: $('#sign_up_email').val(),
+                password: $('#sign_up_password').val(),
+            })
+
+            const token = $("meta[name='_csrf']").attr("content");
+            const header = $("meta[name='_csrf_header']").attr("content");
+
+            $.ajax({
+                url: "/sign-up",
+                type: "POST",
+                data: jsonData,
+                contentType: "application/json",
+                dataType: "json",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                success: function () {
+                    alert("회원가입 성공");
+                    location.href = '/';
+                },
+                error: function (arg) {
+                    alert("회원가입 실패");
+                }
+            });
+
+        }
+    );
+</script>
+
 </body>
 </html>

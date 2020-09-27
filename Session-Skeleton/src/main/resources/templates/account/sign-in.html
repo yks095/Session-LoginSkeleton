@@ -2,26 +2,22 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
-    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <link rel="stylesheet" href="/css/base.css">
-    <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script
-            src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script
-            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script
-            src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <title>Sign-in</title>
+    <link rel="stylesheet" href="css/sign.css">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>SingIn</title>
 </head>
 <body>
 
-<form th:action="@{/sign-in}" method="post" class="wrapper">
+<form th:action="@{/sign-in}" method="post" class="form_border">
     <h2>로그인</h2>
     <input id="sign_in_email" type="email" name="username" autofocus>
     <input id="sign_in_password" type="password" name="password">
     <button id="sign_in_btn" class="btn" type="submit">로그인</button>
+    <a href="/sign-up" style="text-decoration: none">
+        <p style="color: white; font-size: 1rem; text-align: right">회원가입</p>
+    </a>
 </form>
 
 </body>

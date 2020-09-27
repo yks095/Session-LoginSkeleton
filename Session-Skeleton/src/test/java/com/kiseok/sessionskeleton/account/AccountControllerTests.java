@@ -17,18 +17,12 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 public class AccountControllerTests {
-
-    @AfterEach
-    void setUp()    {
-        this.accountRepository.deleteAll();
-    }
 
     @Autowired
     private MockMvc mockMvc;
@@ -38,6 +32,11 @@ public class AccountControllerTests {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @AfterEach
+    void tearDown()    {
+        this.accountRepository.deleteAll();
+    }
 
     @DisplayName("회원가입 화면 조회 테스트")
     @Test
@@ -100,8 +99,9 @@ public class AccountControllerTests {
                 .user(accountDTO.getEmail())
                 .password(accountDTO.getPassword()))
                 .andDo(print())
-                .andExpect(status().is3xxRedirection())
-        ;
+                .andExpect(redirectedUrl("/"))
+                .andExpect(status().is3xxRedirection());
+
     }
 }
 

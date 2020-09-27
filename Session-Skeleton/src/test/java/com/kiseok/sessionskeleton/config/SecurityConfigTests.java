@@ -30,16 +30,7 @@ public class SecurityConfigTests {
     @DisplayName("css 적용 테스트")
     @Test
     public void getCssResource() throws Exception {
-        mockMvc.perform(get("/css/base.css"))
-                .andDo(print())
-                .andExpect(status().isOk())
-        ;
-    }
-
-    @DisplayName("js 적용 테스트")
-    @Test
-    public void getJsResource() throws Exception {
-        mockMvc.perform(get("/js/base.js"))
+        mockMvc.perform(get("/css/sign.css"))
                 .andDo(print())
                 .andExpect(status().isOk())
         ;
