@@ -2,6 +2,7 @@ package com.kiseok.sessionskeleton.account;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kiseok.sessionskeleton.account.dto.AccountDto;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,11 +25,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class AccountControllerTests {
 
+    @AfterEach
+    void setUp()    {
+        this.accountRepository.deleteAll();
+    }
+
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private AccountRepository accountRepository;
 
     @DisplayName("회원가입 화면 조회 테스트")
     @Test

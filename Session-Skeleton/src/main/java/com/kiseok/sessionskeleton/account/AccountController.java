@@ -5,18 +5,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Slf4j
@@ -28,15 +27,13 @@ public class AccountController {
     private final AccountRepository accountRepository;
 
     @GetMapping("/")
-    public String getMain(HttpServletRequest request) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Account account = accountRepository.findByEmail(user.getUsername()).get();
+    public String getMain(Model model, @AuthenticationPrincipal Account account) {
+        model.addAttribute("name", account.getEmail());
         WebAuthenticationDetails details = (WebAuthenticationDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
-        HttpSession session = request.getSession();
 
-        printLogs(user, account, details, session);
+        printLogs(account, details);
 
-        return "main";
+        return "index";
     }
 
     @GetMapping("/sign-up")
@@ -56,13 +53,12 @@ public class AccountController {
         return "account/sign-in";
     }
 
-    private void printLogs(User user, Account account, WebAuthenticationDetails details, HttpSession session) {
-        log.info("Email : " + user.getUsername());
+    private void printLogs(Account account, WebAuthenticationDetails details) {
+        log.info("Email : " + account.getUsername());
         log.info("Password : " + passwordEncoder.matches("1234", account.getPassword()));
-        log.info("ROLE : " + user.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER")));
+        log.info("ROLE : " + account.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER")));
         log.info("SessionID : " + details.getSessionId());
         log.info("RemoteAddress : " + details.getRemoteAddress());
-        log.info("HttpSession : " + session.getId());
     }
 }
 

@@ -27,6 +27,6 @@ public class AccountService implements UserDetailsService {
 
         log.info("DB에서 찾은 user의 password : " + account.getPassword());
 
-        return new User(account.getEmail(), account.getPassword(), Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
+        return account;
     }
 }
