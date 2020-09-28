@@ -1,13 +1,12 @@
 package com.kiseok.sessionskeleton.account.dto;
 
 import com.kiseok.sessionskeleton.account.Account;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
+@NoArgsConstructor @AllArgsConstructor
 @Getter @Setter @Builder
 public class AccountDto {
 

@@ -38,7 +38,7 @@ public class AccountControllerTests {
         this.accountRepository.deleteAll();
     }
 
-    @DisplayName("회원가입 화면 조회 테스트")
+    @DisplayName("회원가입 /sign-up 화면 조회 테스트")
     @Test
     public void getSignUp() throws Exception {
         mockMvc.perform(get("/sign-up"))
@@ -48,7 +48,7 @@ public class AccountControllerTests {
         ;
     }
 
-    @DisplayName("회원가입 성공 테스트")
+    @DisplayName("회원가입 /sign-up 성공 테스트")
     @Test
     public void successSignUp() throws Exception {
         String email = "test@email.com";
@@ -68,6 +68,32 @@ public class AccountControllerTests {
         ;
     }
 
+    @DisplayName("회원가입 /sign-up-form 화면 조회 테스트")
+    @Test
+    public void getSignUpForm() throws Exception {
+        mockMvc.perform(get("/sign-up-form"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(view().name("account/sign-up-form"))
+        ;
+    }
+
+    @DisplayName("회원가입 /sign-up-form 성공 테스트")
+    @Test
+    public void successSignUpForm() throws Exception {
+        String email = "test@email.com";
+        String password = "password";
+
+        mockMvc.perform(post("/sign-up-form")
+                .param("email", email)
+                .param("password", password)
+                .with(csrf()))
+                .andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/sign-in"))
+        ;
+    }
+
     @DisplayName("로그인 화면 조회 테스트")
     @Test
     public void getSignIn() throws Exception {
@@ -78,9 +104,9 @@ public class AccountControllerTests {
         ;
     }
 
-    @DisplayName("로그인 성공 테스트")
+    @DisplayName("로그인 성공 테스트 with /sign-up")
     @Test
-    void success_login() throws Exception   {
+    void success_login_with_signUp() throws Exception   {
         AccountDto accountDTO = AccountDto.builder()
                 .email("test@email.com")
                 .password("password")
@@ -103,5 +129,31 @@ public class AccountControllerTests {
                 .andExpect(status().is3xxRedirection());
 
     }
+
+    @DisplayName("로그인 성공 테스트 with /sign-up-form")
+    @Test
+    void success_login_with_signUpForm() throws Exception   {
+        String email = "test@email.com";
+        String password = "password";
+
+        mockMvc.perform(post("/sign-up-form")
+                .param("email", email)
+                .param("password", password)
+                .with(csrf()))
+                .andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/sign-in"))
+        ;
+
+        mockMvc.perform(formLogin()
+                .loginProcessingUrl("/sign-in")
+                .user(email)
+                .password(password))
+                .andDo(print())
+                .andExpect(redirectedUrl("/"))
+                .andExpect(status().is3xxRedirection());
+
+    }
+
 }
 

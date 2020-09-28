@@ -12,10 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @Slf4j
@@ -45,7 +42,20 @@ public class AccountController {
     @ResponseBody
     public ResponseEntity<?> signUp(@RequestBody @Valid AccountDto accountDto) {
         accountRepository.save(accountDto.toEntity(passwordEncoder));
-        return new ResponseEntity<>("{}", HttpStatus.CREATED);
+       return new ResponseEntity<>("{}", HttpStatus.CREATED);
+    }
+
+    @GetMapping("/sign-up-form")
+    public String getSignUpForm(Model model)   {
+        model.addAttribute("accountDto", new AccountDto());
+        return "account/sign-up-form";
+    }
+
+    @PostMapping("/sign-up-form")
+    public String signUpForm(@Valid AccountDto accountDto)   {
+        accountRepository.save(accountDto.toEntity(passwordEncoder));
+
+        return "redirect:/sign-in";
     }
 
     @GetMapping("/sign-in")

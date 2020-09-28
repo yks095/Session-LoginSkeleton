@@ -16,7 +16,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests().antMatchers("/sign-up").permitAll()
+                .authorizeRequests().antMatchers("/sign-up", "/sign-up-form").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -28,7 +28,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
-        web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+        web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+                .antMatchers("/favicon.ico");
+
     }
 
 }

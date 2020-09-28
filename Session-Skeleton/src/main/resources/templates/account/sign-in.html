@@ -12,8 +12,8 @@
 
 <form th:action="@{/sign-in}" method="post" class="form_border">
     <h2>로그인</h2>
-    <input id="sign_in_email" type="email" name="username" autofocus>
-    <input id="sign_in_password" type="password" name="password">
+    <input class="base_input" type="email" name="username" autofocus>
+    <input class="base_input" type="password" name="password">
     <button id="sign_in_btn" class="btn" type="submit">로그인</button>
     <a href="/sign-up" style="text-decoration: none">
         <p style="color: white; font-size: 1rem; text-align: right">회원가입</p>
