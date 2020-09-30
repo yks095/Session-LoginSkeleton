@@ -38,28 +38,26 @@ public class AccountControllerTests {
         this.accountRepository.deleteAll();
     }
 
-    @DisplayName("회원가입 /sign-up 화면 조회 테스트")
+    private static final String SIGN_UP = "/sign-up";
+    private static final String SIGN_UP_FORM = "/sign-up-form";
+    private static final String SIGN_IN = "/sign-in";
+
+    @DisplayName("/sign-up 화면 조회 -> 200 OK")
     @Test
-    public void getSignUp() throws Exception {
-        mockMvc.perform(get("/sign-up"))
+    public void load_sign_up() throws Exception {
+        mockMvc.perform(get(SIGN_UP))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("account/sign-up"))
         ;
     }
 
-    @DisplayName("회원가입 /sign-up 성공 테스트")
+    @DisplayName("/sign up 유저 등록 성공 -> 201 CREATED")
     @Test
-    public void successSignUp() throws Exception {
-        String email = "test@email.com";
-        String password = "password";
+    public void save_sign_up() throws Exception {
+        AccountDto accountDTO = createAccountDto();
 
-        AccountDto accountDTO = AccountDto.builder()
-                .email(email)
-                .password(password)
-                .build();
-
-        mockMvc.perform(post("/sign-up")
+        mockMvc.perform(post(SIGN_UP)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(accountDTO))
                 .with(csrf()))
@@ -68,51 +66,48 @@ public class AccountControllerTests {
         ;
     }
 
-    @DisplayName("회원가입 /sign-up-form 화면 조회 테스트")
+    @DisplayName("/sign-up-form 화면 조회 -> 200 OK")
     @Test
-    public void getSignUpForm() throws Exception {
-        mockMvc.perform(get("/sign-up-form"))
+    public void load_sign_up_form() throws Exception {
+        mockMvc.perform(get(SIGN_UP_FORM))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("account/sign-up-form"))
         ;
     }
 
-    @DisplayName("회원가입 /sign-up-form 성공 테스트")
+    @DisplayName("/sign-up-form 유저 등록 성공 -> 201 CREATED")
     @Test
     public void successSignUpForm() throws Exception {
-        String email = "test@email.com";
-        String password = "password";
+        AccountDto accountDto = createAccountDto();
 
-        mockMvc.perform(post("/sign-up-form")
-                .param("email", email)
-                .param("password", password)
+        mockMvc.perform(post(SIGN_UP_FORM)
+                .param("email", accountDto.getEmail())
+                .param("password", accountDto.getPassword())
                 .with(csrf()))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/sign-in"))
+                .andExpect(view().name("redirect:/sign-in"))
         ;
     }
 
-    @DisplayName("로그인 화면 조회 테스트")
+    @DisplayName("로그인 화면 조회 -> 200 OK")
     @Test
-    public void getSignIn() throws Exception {
-        mockMvc.perform(get("/sign-in"))
+    public void load_sign_in() throws Exception {
+        mockMvc.perform(get(SIGN_IN))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("account/sign-in"))
         ;
     }
 
-    @DisplayName("로그인 성공 테스트 with /sign-up")
+    @DisplayName("로그인 성공 with /sign-up -> 302 REDIRECT")
     @Test
     void success_login_with_signUp() throws Exception   {
-        AccountDto accountDTO = AccountDto.builder()
-                .email("test@email.com")
-                .password("password")
-                .build();
+        AccountDto accountDTO = createAccountDto();
 
-        mockMvc.perform(post("/sign-up")
+        mockMvc.perform(post(SIGN_UP)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(accountDTO))
                 .with(csrf()))
@@ -121,7 +116,7 @@ public class AccountControllerTests {
         ;
 
         mockMvc.perform(formLogin()
-                .loginProcessingUrl("/sign-in")
+                .loginProcessingUrl(SIGN_IN)
                 .user(accountDTO.getEmail())
                 .password(accountDTO.getPassword()))
                 .andDo(print())
@@ -130,30 +125,39 @@ public class AccountControllerTests {
 
     }
 
-    @DisplayName("로그인 성공 테스트 with /sign-up-form")
+    @DisplayName("로그인 성공 with /sign-up-form -> 302 REDIRECT")
     @Test
     void success_login_with_signUpForm() throws Exception   {
-        String email = "test@email.com";
-        String password = "password";
+        AccountDto accountDto = createAccountDto();
 
-        mockMvc.perform(post("/sign-up-form")
-                .param("email", email)
-                .param("password", password)
+        mockMvc.perform(post(SIGN_UP_FORM)
+                .param("email", accountDto.getEmail())
+                .param("password", accountDto.getPassword())
                 .with(csrf()))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/sign-in"))
+                .andExpect(view().name("redirect:/sign-in"))
         ;
 
         mockMvc.perform(formLogin()
-                .loginProcessingUrl("/sign-in")
-                .user(email)
-                .password(password))
+                .loginProcessingUrl(SIGN_IN)
+                .user(accountDto.getEmail())
+                .password(accountDto.getPassword()))
                 .andDo(print())
                 .andExpect(redirectedUrl("/"))
                 .andExpect(status().is3xxRedirection());
 
     }
 
+    private AccountDto createAccountDto() {
+        String email = "test@email.com";
+        String password = "password";
+
+        return AccountDto.builder()
+                .email(email)
+                .password(password)
+                .build();
+    }
 }
 
