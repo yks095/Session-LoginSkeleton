@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
@@ -40,7 +41,10 @@ public class AccountController {
 
     @PostMapping("/sign-up")
     @ResponseBody
-    public ResponseEntity<?> signUp(@RequestBody @Valid AccountDto accountDto) {
+    public ResponseEntity<?> signUp(@RequestBody @Valid AccountDto accountDto, Errors errors) {
+        if(errors.hasErrors())  {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         accountRepository.save(accountDto.toEntity(passwordEncoder));
        return new ResponseEntity<>("{}", HttpStatus.CREATED);
     }
