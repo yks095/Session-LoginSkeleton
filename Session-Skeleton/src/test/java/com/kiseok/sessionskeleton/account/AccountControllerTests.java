@@ -102,6 +102,21 @@ public class AccountControllerTests {
         ;
     }
 
+    @DisplayName("/sign-up-form 유저 유효성 검사 실패 -> 400 BAD_REQUEST")
+    @ParameterizedTest(name = "{index} {displayName} message={0}")
+    @MethodSource("validSaveAccount")
+    public void save_sign_up_form_invalid_400(String email, String password) throws Exception {
+        mockMvc.perform(post(SIGN_UP_FORM)
+                .param("email", email)
+                .param("password", password)
+                .with(csrf()))
+                .andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/sign-up-form"))
+                .andExpect(redirectedUrl("/sign-up-form"))
+        ;
+    }
+
     @DisplayName("/sign-up-form 유저 등록 성공 -> 201 CREATED")
     @Test
     public void save_sign_up_form_200() throws Exception {

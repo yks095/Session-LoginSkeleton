@@ -11,8 +11,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -21,16 +19,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/sign-in")
-                .loginProcessingUrl("/sign-in")
                 .permitAll()
+                .and()
+                .logout()
+                .logoutSuccessUrl("/sign-in")
+                .deleteCookies("JSESSIONID")
         ;
     }
 
     @Override
     public void configure(WebSecurity web) {
-        web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-                .antMatchers("/favicon.ico");
-
+        web.ignoring()
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+                .antMatchers("/favicon.ico")
+        ;
     }
 
 }

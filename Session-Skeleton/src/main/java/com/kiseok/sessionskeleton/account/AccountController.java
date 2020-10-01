@@ -56,7 +56,10 @@ public class AccountController {
     }
 
     @PostMapping("/sign-up-form")
-    public String signUpForm(@Valid AccountDto accountDto)   {
+    public String signUpForm(@Valid AccountDto accountDto, Errors errors)   {
+        if(errors.hasErrors())  {
+            return "redirect:/sign-up-form";
+        }
         accountRepository.save(accountDto.toEntity(passwordEncoder));
 
         return "redirect:/sign-in";
