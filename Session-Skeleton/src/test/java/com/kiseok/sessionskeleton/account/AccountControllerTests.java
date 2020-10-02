@@ -61,7 +61,7 @@ public class AccountControllerTests {
     }
 
     @DisplayName("/sign up 유저 유효성 검사 실패 -> 400 BAD_REQUEST")
-    @ParameterizedTest(name = "{index} {displayName} message={0}")
+    @ParameterizedTest(name = "{index}) email={0}, password={1}")
     @MethodSource("validSaveAccount")
     public void save_sign_up_invalid_400(String email, String password) throws Exception {
         AccountDto accountDto = AccountDto.builder()
@@ -103,7 +103,7 @@ public class AccountControllerTests {
     }
 
     @DisplayName("/sign-up-form 유저 유효성 검사 실패 -> 400 BAD_REQUEST")
-    @ParameterizedTest(name = "{index} {displayName} message={0}")
+    @ParameterizedTest(name = "{index}) email={0}, password={1}")
     @MethodSource("validSaveAccount")
     public void save_sign_up_form_invalid_400(String email, String password) throws Exception {
         mockMvc.perform(post(SIGN_UP_FORM)
