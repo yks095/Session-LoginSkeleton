@@ -39,7 +39,7 @@ public class OAuthAttributes {
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
                 .build()
-                ;
+        ;
     }
 
     public Account toEntity()   {

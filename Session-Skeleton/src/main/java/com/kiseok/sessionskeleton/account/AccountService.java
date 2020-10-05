@@ -1,10 +1,8 @@
 package com.kiseok.sessionskeleton.account;
 
 import com.kiseok.sessionskeleton.config.auth.OAuthAttributes;
-import com.kiseok.sessionskeleton.config.auth.SessionAccount;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,11 +10,8 @@ import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserServ
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import javax.servlet.http.HttpSession;
-import java.util.Collections;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -24,7 +19,6 @@ import java.util.Collections;
 public class AccountService implements UserDetailsService, OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final AccountRepository accountRepository;
-    private final HttpSession httpSession;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -35,7 +29,7 @@ public class AccountService implements UserDetailsService, OAuth2UserService<OAu
 
         log.info("DB에서 찾은 user의 password : " + account.getPassword());
 
-        return account;
+        return new AccountAdapter(account);
     }
 
     @Override
@@ -47,12 +41,9 @@ public class AccountService implements UserDetailsService, OAuth2UserService<OAu
         String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
 
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
-
         Account account = saveOrUpdate(attributes);
-        httpSession.setAttribute("account", new SessionAccount(account));
 
-        return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority(
-                account.getAccountRole().name())), attributes.getAttributes(), attributes.getNameAttributeKey());
+        return new AccountAdapter(account, attributes);
     }
 
     private Account saveOrUpdate(OAuthAttributes attributes) {
