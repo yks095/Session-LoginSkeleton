@@ -28,3 +28,14 @@
     padding: 1rem;
     width: 100%;
 }
+
+.google_btn {
+    background: green;
+    border-radius: 4px;
+    text-align: center;
+    border: none;
+    color: white;
+    margin-bottom: 0.5rem;
+    padding: 1rem;
+    width: 100%;
+}

@@ -1,6 +1,8 @@
 package com.kiseok.sessionskeleton.account.dto;
 
 import com.kiseok.sessionskeleton.account.Account;
+import com.kiseok.sessionskeleton.account.AccountRole;
+import com.kiseok.sessionskeleton.account.SocialType;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.validation.constraints.Email;
@@ -21,6 +23,8 @@ public class AccountDto {
         return Account.builder()
                 .email(this.email)
                 .password(passwordEncoder.encode(this.password))
+                .socialType(SocialType.PLAIN)
+                .accountRole(AccountRole.USER)
                 .build();
     }
 }

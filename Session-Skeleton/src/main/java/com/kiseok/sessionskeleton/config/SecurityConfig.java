@@ -1,5 +1,7 @@
 package com.kiseok.sessionskeleton.config;
 
+import com.kiseok.sessionskeleton.account.AccountService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,9 +11,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.web.header.writers.StaticHeadersWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final AccountService accountService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -31,6 +36,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutSuccessUrl("/sign-in")
                 .deleteCookies("JSESSIONID")
+                .and()
+                .oauth2Login()
+                .userInfoEndpoint()
+                .userService(accountService)
         ;
     }
 
