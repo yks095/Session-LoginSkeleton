@@ -22,12 +22,7 @@ public class AccountService implements UserDetailsService, OAuth2UserService<OAu
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        log.info("loadUserByUsername 진입");
-        log.info("username : " + email);
-
         Account account = accountRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email));
-
-        log.info("DB에서 찾은 user의 password : " + account.getPassword());
 
         return new AccountAdapter(account);
     }
