@@ -12,3 +12,6 @@ cache:
     - '$HOME/.gradle'
     
 script: "cd Session-Skeleton"
+
+after_success:
+  - ./gradlew test jacocoTestReport coveralls
