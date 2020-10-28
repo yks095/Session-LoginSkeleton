@@ -65,6 +65,5 @@ public class AccountController {
     public String getSignIn() {
         return "account/sign-in";
     }
-
 }
 

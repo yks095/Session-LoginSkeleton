@@ -22,6 +22,8 @@ public class Account {
 
     private String picture;
 
+    // JPA로 데이터를 저장할 때 Enum 값을 어떤 형태로 저장할 지 결정해주는 애노테이션
+    // Enum은 JAVA의 열거형 데이터 타입
     @Enumerated(value = EnumType.STRING)
     private AccountRole accountRole;
 
