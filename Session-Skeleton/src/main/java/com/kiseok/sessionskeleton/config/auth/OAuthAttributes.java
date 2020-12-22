@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import java.util.Map;
 
+// OAuth2UserService를 통해 가져온 OAuth2User의 attribute를 담을 클래스 => DTO로 간주하고 사용
 @Getter
 public class OAuthAttributes {
     private Map<String, Object> attributes;
@@ -26,6 +27,7 @@ public class OAuthAttributes {
         this.socialType = socialType;
     }
 
+    // OAuth2User에서 반환하는 사용자 정보를 꺼내주기 위한 메서드
     public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes)   {
         return ofGoogle(userNameAttributeName, attributes);
     }

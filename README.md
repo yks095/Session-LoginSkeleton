@@ -1,4 +1,4 @@
-# Login Base Session
+# Session Login Skeleton
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Build Status](https://travis-ci.org/yks095/Session-LoginSkeleton.svg?branch=master)](https://travis-ci.org/github/yks095/Session-LoginSkeleton) ![Coverage Status](https://coveralls.io/repos/github/yks095/Spring-LoginSkeleton/badge.svg?branch=master)
 
 자주 사용되는 로그인, 회원가입 기능에 대한 베이스 코드를 작성한 뒤 향후 프로젝트에 적용하기 위해 만든 저장소입니다.

@@ -32,7 +32,10 @@ public class AccountService implements UserDetailsService, OAuth2UserService<OAu
         OAuth2UserService delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
+        // 현재 로그인 진행중인 서비스 코드를 구분하기 위함 => 네이버 로그인? or 구글 로그인? or ...
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
+
+        // OAuth2 로그인 진행 시 key가 되는 필드 값.
         String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
 
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());

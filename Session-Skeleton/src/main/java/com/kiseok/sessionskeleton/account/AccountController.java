@@ -42,7 +42,8 @@ public class AccountController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         accountRepository.save(accountDto.toEntity(passwordEncoder));
-       return new ResponseEntity<>("{}", HttpStatus.CREATED);
+
+        return new ResponseEntity<>("{}", HttpStatus.CREATED);
     }
 
     @GetMapping("/sign-up-form")
@@ -65,6 +66,5 @@ public class AccountController {
     public String getSignIn() {
         return "account/sign-in";
     }
-
 }
 
